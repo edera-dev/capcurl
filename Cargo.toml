@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "crates/capcurl-grant",
     "crates/capcurl-http",
+    "crates/capcurl-core",
 ]
 
 [workspace.package]
@@ -31,3 +32,4 @@ capsudo-transport = { path = "../capsudo-rs/crates/capsudo-transport" }
 
 capcurl-grant = { path = "crates/capcurl-grant", version = "0.1.0" }
 capcurl-http = { path = "crates/capcurl-http", version = "0.1.0" }
+capcurl-core = { path = "crates/capcurl-core", version = "0.1.0" }
