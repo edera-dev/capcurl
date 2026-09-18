@@ -5,6 +5,7 @@ members = [
     "crates/capcurl-http",
     "crates/capcurl-core",
     "crates/capcurld",
+    "crates/capcurl",
 ]
 
 [workspace.package]

@@ -1,0 +1,15 @@
+[package]
+name = "capcurl"
+description = "capcurl client: mint a capability descriptor and make the one request it allows"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+
+[dependencies]
+capcurl-core.workspace = true
+capsudo-transport.workspace = true
+tokio.workspace = true
