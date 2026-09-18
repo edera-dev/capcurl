@@ -80,6 +80,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "capcurld"
+version = "0.1.0"
+dependencies = [
+ "capcurl-core",
+ "capcurl-grant",
+ "capsudo-transport",
+ "tokio",
+]
+
+[[package]]
 name = "capsudo-proto"
 version = "0.1.2"
 dependencies = [
