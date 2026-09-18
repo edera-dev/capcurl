@@ -1,0 +1,78 @@
+#
+# Cargo Make Configuration
+#
+[config]
+reduce_output = false
+skip_core_tasks = true
+# This is a virtual workspace; run each task once at the root (our tasks already
+# use --workspace) rather than letting cargo-make fan them out per member, where
+# root-only tasks like assemble-release-assets don't exist.
+default_to_workspace = false
+
+#
+# Environment and Profile Setup
+#
+# default profile
+[env]
+CAPCURL_BUILD_FLAGS = ""
+# TODO: support more than just linux when it makes sense
+TARGET_ARCH = { condition.env_not_set = ["TARGET_ARCH"], value = "x86_64" }
+TARGET_LIBC = { condition.env_not_set = ["TARGET_LIBC"], value = "musl" }
+TARGET_VENDOR = { condition.env_not_set = ["TARGET_VENDOR"], value = "unknown" }
+CARGO_BUILD_TARGET = { condition.env_not_set = [
+  "CARGO_BUILD_TARGET",
+], value = "${TARGET_ARCH}-${TARGET_VENDOR}-linux-${TARGET_LIBC}" }
+RUSTFLAG_STATIC = { condition.env_true = [
+  "STATIC_BINARY",
+], value = "-Ctarget-feature=+crt-static" }
+RUSTFLAGS = { script = ["echo ${RUSTFLAG_STATIC}"] }
+
+# release profile
+# Use with: cargo make --profile release <task>
+[env.release]
+CAPCURL_BUILD_FLAGS = "--release"
+
+#
+# Tasks
+#
+[tasks.clippy]
+install_crate = "clippy"
+command = "cargo"
+args = ["clippy", "--workspace", "--all-targets"]
+dependencies = ["rustup-target-add"]
+
+[tasks.format]
+install_crate = "rustfmt"
+command = "cargo"
+args = ["fmt", "--", "--emit=files"]
+
+[tasks.format-check]
+install_crate = "rustfmt"
+command = "cargo"
+args = ["fmt", "--all", "--", "--check"]
+
+[tasks.clean]
+command = "cargo"
+args = ["clean"]
+
+[tasks.rustup-target-add]
+command = "rustup"
+args = ["target", "add", "${CARGO_BUILD_TARGET}"]
+
+[tasks.build]
+command = "cargo"
+args = ["build", "--workspace", "@@split(CAPCURL_BUILD_FLAGS, )"]
+dependencies = ["rustup-target-add"]
+
+[tasks.test]
+command = "cargo"
+args = ["test", "--workspace"]
+dependencies = ["rustup-target-add"]
+
+[tasks.ci]
+dependencies = [
+  "format-check",
+  "clippy",
+  "build",
+  "test",
+]

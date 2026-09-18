@@ -1,0 +1,31 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/capcurl-grant",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "0BSD"
+authors = ["Edera, Inc."]
+readme = "README.md"
+homepage = "https://github.com/edera-dev/capcurl"
+repository = "https://github.com/edera-dev/capcurl"
+
+[workspace.dependencies]
+thiserror = "2"
+async-trait = "0.1"
+tokio = { version = "1", features = ["rt", "rt-multi-thread", "net", "io-util", "macros", "sync", "time"] }
+nix = { version = "0.31", features = ["socket", "uio", "fs", "user"] }
+libc = "0.2"
+url = "2"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "http2"] }
+
+# The capability channel itself is capsudo's. capcurl adds no transport of its
+# own: it reuses `Transport`/`Listener` verbatim, which is what makes a minted
+# descriptor work unchanged across an Edera zone boundary.
+capsudo-proto = { path = "../capsudo-rs/crates/capsudo-proto" }
+capsudo-transport = { path = "../capsudo-rs/crates/capsudo-transport" }
+
+capcurl-grant = { path = "crates/capcurl-grant", version = "0.1.0" }
