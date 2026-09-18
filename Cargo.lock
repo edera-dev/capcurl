@@ -11,6 +11,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "capcurl-http"
+version = "0.1.0"
+dependencies = [
+ "thiserror",
+]
+
+[[package]]
 name = "displaydoc"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
